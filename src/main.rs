@@ -30,15 +30,15 @@ fn compressor(input: String) {
         .split_whitespace()
         .collect::<HashSet<_>>()
         .into_iter()
-		// got how to find the sorted without doing it in place from:
-		// https://stackoverflow.com/questions/54701548/
-		// how-can-i-sort-an-iterator-without-putting-it-all-in-a-vector
+        // got how to find the sorted without doing it in place from:
+        // https://stackoverflow.com/questions/54701548/
+        // how-can-i-sort-an-iterator-without-putting-it-all-in-a-vector
         .sorted()
         .collect();
 
-	let input_n: String = input.lines().collect::<Vec<&str>>().join("\n");
+    let input_n: String = input.lines().collect::<Vec<&str>>().join("\n");
 
-	let updated:String = input_n
+    let updated: String = input_n
         .split_terminator('\n')
         .map(|n| {
             n.split_terminator('\t')
@@ -47,7 +47,10 @@ fn compressor(input: String) {
                         .map(|s| {
                             // println!("THIS IS S!:{:?}", s);
                             if !s.is_empty() {
-								uniq.iter().position(|c| c == &s).unwrap().to_string()
+                                // got how to find the position from:
+                                // https://stackoverflow.com/questions/30558246/
+                                // how-do-i-find-the-index-of-an-element-in-an-array-vector-or-slice
+                                uniq.iter().position(|c| c == &s).unwrap().to_string()
                             } else {
                                 s.to_string()
                             }
@@ -62,9 +65,7 @@ fn compressor(input: String) {
         .join("\n");
 
     println!("sorted dict:\n{:?}", uniq);
-	println!("our updated eventually:\n{}", updated);
-
-
+    println!("our updated eventually:\n{}", updated);
 }
 
 fn decompressor(input: String) {
