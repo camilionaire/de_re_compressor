@@ -7,3 +7,5 @@
 ### To use:
  - type `cargo run <decompress/compress> <filename>` to run
  - filename can be static path or from root directory.
+ - compressed file will be saved in `files/out_enc.txt`
+ - decompressed file will be saved in `files/out_dec.txt`

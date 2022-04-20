@@ -2,7 +2,6 @@ use itertools::Itertools;
 use std::{collections::HashSet, env, fs};
 
 fn main() {
-    //    println!("Hello, world!");
     let args: Vec<String> = env::args().skip(1).collect();
     if args.len() != 2 {
         println!("to run:\ncargo run <compress/decompress> <filename>");
@@ -25,6 +24,9 @@ fn main() {
 fn compressor(input: String) {
     println!("Compression starting...");
 
+    // this creates our dictionary.  it takes the inputs, collects the hashset
+    // creating the individual words, and creates an iterable from that sorts it
+    // and recollects it as a vector.
     let uniq: Vec<&str> = input
         .split_whitespace()
         .collect::<HashSet<_>>()
@@ -35,6 +37,11 @@ fn compressor(input: String) {
         .sorted()
         .collect();
 
+    // turns the input into an iterable based with each element being a line
+    // that in turn is turned into an interator based on tabs with each element in turn
+    // being turned into an iterable based on spaces
+    // each of those, if not empty, get's turned into the position in the dictionary vector.
+    // those all get connected back up the line with the appropriate whitespace ' ', '\t', '\n'
     let updated: String = input
         .lines()
         .map(|n| {
@@ -61,15 +68,21 @@ fn compressor(input: String) {
         .join("\n");
 
     let printable = uniq.join(" ");
-    let _ = fs::write("out_enc.txt", format!("{printable}\n{updated}"));
-    println!("File compressed and can be found at 'out_enc.txt'");
+    let _ = fs::write("files/out_enc.txt", format!("{printable}\n{updated}"));
+    println!("File compressed and can be found at 'files/out_enc.txt'");
 }
 
 fn decompressor(input: String) {
     println!("Decompression starting...");
 
+    // collects the first line of the input and turns it into a vector.
     let dict: Vec<&str> = input.lines().next().unwrap().split_whitespace().collect();
 
+
+    // similar to compressor, turns the input into an iterable based on lines, of which
+    // each element is turned into an iterable based on '\t' and then ' '.
+    // it's then turned back into words from the dictionary and pasted back together backwards
+    // into a string.
     let updated: String = input
         .lines()
         .skip(1)
@@ -93,6 +106,7 @@ fn decompressor(input: String) {
         .collect::<Vec<String>>()
         .join("\n");
 
-    let _ = fs::write("out_dec.txt", updated);
-    println!("File decompressed and can be found at 'out_dec'.txt");
+        // writes out and prints statement saying so.
+    let _ = fs::write("files/out_dec.txt", updated);
+    println!("File decompressed and can be found at 'files/out_dec'.txt");
 }
