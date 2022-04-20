@@ -23,29 +23,25 @@ fn main() {
 }
 
 fn compressor(input: String) {
-    println!("this is the compressor test");
-    println!("this is the input:\n{:?}", input);
+    println!("Compression starting...");
 
     let uniq: Vec<&str> = input
         .split_whitespace()
         .collect::<HashSet<_>>()
         .into_iter()
-        // got how to find the sorted without doing it in place from:
+        // I got how to find the sorted without doing it in place as mutable from:
         // https://stackoverflow.com/questions/54701548/
         // how-can-i-sort-an-iterator-without-putting-it-all-in-a-vector
         .sorted()
         .collect();
 
-    let input_n: String = input.lines().collect::<Vec<&str>>().join("\n");
-
-    let updated: String = input_n
-        .split_terminator('\n')
+    let updated: String = input
+        .lines()
         .map(|n| {
             n.split_terminator('\t')
                 .map(|t| {
                     t.split_terminator(' ')
                         .map(|s| {
-                            // println!("THIS IS S!:{:?}", s);
                             if !s.is_empty() {
                                 // got how to find the position from:
                                 // https://stackoverflow.com/questions/30558246/
@@ -64,26 +60,24 @@ fn compressor(input: String) {
         .collect::<Vec<String>>()
         .join("\n");
 
-    println!("sorted dict:\n{:?}", uniq);
-    println!("our updated eventually:\n{}", updated);
+    let printable = uniq.join(" ");
+    let _ = fs::write("out_enc.txt", format!("{printable}\n{updated}"));
+    println!("File compressed and can be found at 'out_enc.txt'");
 }
 
 fn decompressor(input: String) {
-    println!("this is the decompressor test");
-    println!("this is the input:\n{:?}", input);
+    println!("Decompression starting...");
 
     let dict: Vec<&str> = input.lines().next().unwrap().split_whitespace().collect();
 
-    let body = input.lines().skip(1).collect::<Vec<&str>>().join("\n");
-
-    let updated: String = body
-        .split_terminator('\n')
+    let updated: String = input
+        .lines()
+        .skip(1)
         .map(|n| {
             n.split_terminator('\t')
                 .map(|t| {
                     t.split_terminator(' ')
                         .map(|s| {
-                            // println!("THIS IS S!:{:?}", s);
                             if !s.is_empty() {
                                 dict[s.to_string().parse::<usize>().unwrap()].to_string()
                             } else {
@@ -98,32 +92,7 @@ fn decompressor(input: String) {
         })
         .collect::<Vec<String>>()
         .join("\n");
-    println!("This is our dict:\n{:?}", dict);
-    println!("This is our body:\n{}", body);
-    println!("This is our updated:\n{}", updated);
 
     let _ = fs::write("out_dec.txt", updated);
+    println!("File decompressed and can be found at 'out_dec'.txt");
 }
-
-// NOTE this is the lame stuff that I wrote for the thing.
-// let mut uniq: Vec<&str> = contents.split_whitespace().collect::<HashSet<_>>().into_iter().collect();
-// let _ = uniq.sort_unstable();
-// println!("{:?}", uniq);
-
-// let compressed = contents.chars();
-
-// println!("{:?}", compressed);
-
-// fs::write("./output.txt", contents.in)
-
-// let mut phrase: String = "".to_string();
-// for line in contents.lines() {
-
-// }
-
-// let lines = contents.lines();
-
-// for line in lines {
-// 	let words: Vec<&str> = line.split_whitespace().collect();
-// }
-// println!("The text is:\n{}", contents);
