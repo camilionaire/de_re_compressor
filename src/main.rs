@@ -1,3 +1,5 @@
+// need intertools to sort the dictionary and return sorted copy
+// sort in the std library sorts in place and requires mutable variables.
 use itertools::Itertools;
 use std::{collections::HashSet, env, fs};
 
@@ -78,7 +80,6 @@ fn decompressor(input: String) {
     // collects the first line of the input and turns it into a vector.
     let dict: Vec<&str> = input.lines().next().unwrap().split_whitespace().collect();
 
-
     // similar to compressor, turns the input into an iterable based on lines, of which
     // each element is turned into an iterable based on '\t' and then ' '.
     // it's then turned back into words from the dictionary and pasted back together backwards
@@ -106,7 +107,7 @@ fn decompressor(input: String) {
         .collect::<Vec<String>>()
         .join("\n");
 
-        // writes out and prints statement saying so.
+    // writes out and prints statement saying so.
     let _ = fs::write("files/out_dec.txt", updated);
     println!("File decompressed and can be found at 'files/out_dec'.txt");
 }
