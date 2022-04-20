@@ -70,8 +70,9 @@ fn compressor(input: String) {
         .join("\n");
 
     let printable = uniq.join(" ");
-    let _ = fs::write("files/out_enc.txt", format!("{printable}\n{updated}"));
-    println!("File compressed and can be found at 'files/out_enc.txt'");
+    // let _ = fs::write("files/out_enc.txt", format!("{printable}\n{updated}"));
+    println!("File compressed and can be found here:");//at 'files/out_enc.txt'");
+    println!("{}\n{}", printable, updated);
 }
 
 fn decompressor(input: String) {
@@ -93,7 +94,12 @@ fn decompressor(input: String) {
                     t.split_terminator(' ')
                         .map(|s| {
                             if !s.is_empty() {
-                                dict[s.to_string().parse::<usize>().unwrap()].to_string()
+                                let num = s.to_string().parse::<usize>().expect(
+                                    "That wasn't a number that we came across to decompress.");
+                                if num >= dict.len() {
+                                    panic!("It seems that the number exceeds our dictionary size.");
+                                }
+                                dict[num].to_string()
                             } else {
                                 s.to_string()
                             }
@@ -108,6 +114,7 @@ fn decompressor(input: String) {
         .join("\n");
 
     // writes out and prints statement saying so.
-    let _ = fs::write("files/out_dec.txt", updated);
-    println!("File decompressed and can be found at 'files/out_dec'.txt");
+    // let _ = fs::write("files/out_dec.txt", updated);
+    println!("File decompressed and can be found here:"); //at 'files/out_dec'.txt");
+    println!("{}", updated);
 }
